@@ -7,9 +7,21 @@ using Telegram.Bot.Types.Enums;
 
 namespace InnovAIDemo
 {
-
+    /// <summary>
+    /// Background service that handles Telegram bot operations.
+    /// Continuously polls for incoming messages and processes them using AI agents.
+    /// </summary>
+    /// <param name="botClient">The Telegram bot client</param>
+    /// <param name="agentsService">Service for managing AI agent instances</param>
+    /// <param name="logger">Logger for this service</param>
     public class TelegramBotService(ITelegramBotClient botClient, AgentInstancesService agentsService, ILogger<TelegramBotService> logger) : BackgroundService
     {
+        /// <summary>
+        /// Main execution method for the background service.
+        /// Continuously polls for Telegram updates and processes incoming messages.
+        /// </summary>
+        /// <param name="stoppingToken">Cancellation token to stop the service</param>
+        /// <returns>A task representing the asynchronous operation</returns>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await Task.Run(async () =>
@@ -44,6 +56,13 @@ namespace InnovAIDemo
             }, stoppingToken);
         }
 
+        /// <summary>
+        /// Handles incoming Telegram messages.
+        /// Processes the message with the appropriate AI agent and sends a response.
+        /// </summary>
+        /// <param name="update">The Telegram update containing the message</param>
+        /// <param name="cancellationToken">Cancellation token for the operation</param>
+        /// <returns>A task representing the asynchronous operation</returns>
         private async Task OnMessageReceivedAsync(Update update, CancellationToken cancellationToken)
         {
             if (update.Message == null || update.Message.Text == null)

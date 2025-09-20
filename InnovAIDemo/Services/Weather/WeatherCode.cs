@@ -1,13 +1,35 @@
 ﻿namespace InnovAIDemo.Services.Weather
 {
+    /// <summary>
+    /// Represents weather condition codes from Open-Meteo API with descriptions and emoji icons.
+    /// Provides mapping between numeric weather codes and human-readable descriptions.
+    /// </summary>
     public class WeatherCode
     {
+        /// <summary>
+        /// Private constructor to prevent external instantiation
+        /// </summary>
         private WeatherCode() { }
 
+        /// <summary>
+        /// Gets the numeric weather code
+        /// </summary>
         public required int Code { get; init; }
+        
+        /// <summary>
+        /// Gets the human-readable description of the weather condition
+        /// </summary>
         public required string Description { get; init; }
+        
+        /// <summary>
+        /// Gets the emoji icon representing the weather condition
+        /// </summary>
         public required string Emoji { get; init; }
 
+        /// <summary>
+        /// Gets all available weather codes with their descriptions and emojis.
+        /// </summary>
+        /// <returns>List of all weather codes</returns>
         public static List<WeatherCode> GetWeatherCodes() => new List<WeatherCode>
         {
             new() { Code = 0, Description = "Clear sky", Emoji = "☀️" },
@@ -39,6 +61,12 @@
             new() { Code = 96, Description = "Thunderstorm with slight hail", Emoji = "⛈️🧊" },
             new() { Code = 99, Description = "Thunderstorm with heavy hail", Emoji = "⛈️🧊🧊" }
         };
+        
+        /// <summary>
+        /// Gets the weather code information for a specific numeric code.
+        /// </summary>
+        /// <param name="code">The numeric weather code to look up</param>
+        /// <returns>The weather code information, or null if not found</returns>
         public static WeatherCode? GetWeatherCode(int code) => GetWeatherCodes().FirstOrDefault(wc => wc.Code == code);
     }
 

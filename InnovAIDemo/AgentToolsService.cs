@@ -6,11 +6,25 @@ using InnovAIDemo.Services.Weather;
 
 namespace InnovAIDemo
 {
+    /// <summary>
+    /// Service that provides tools for AI agents to interact with various services.
+    /// These tools can be called by the AI agent to perform actions like getting weather,
+    /// searching Wikipedia, or controlling LED lights.
+    /// </summary>
+    /// <param name="weatherService">Service for weather information</param>
+    /// <param name="wikipediaSearch">Service for Wikipedia searches</param>
+    /// <param name="ledService">Service for LED control</param>
+    /// <param name="logger">Logger for this service</param>
     public class AgentToolsService(WeatherService weatherService
         , WikipediaSearchService wikipediaSearch
-        , LedService ledService
+        , ILedService ledService
         , ILogger<AgentToolsService> logger)
     {
+        /// <summary>
+        /// Gets the current weather for a specified location.
+        /// </summary>
+        /// <param name="location">The location to get weather for</param>
+        /// <returns>Current weather information including temperature and conditions</returns>
         [AgentTool(Description = "Gets the current weather given a location")]
         public async Task<object> GetWeather([Description("location")] string location)
         {
@@ -35,6 +49,12 @@ namespace InnovAIDemo
         }
 
 
+        /// <summary>
+        /// Gets the weather forecast for the next 24 hours for a specified location.
+        /// Returns weather data at 3-hour intervals.
+        /// </summary>
+        /// <param name="location">The location to get weather forecast for</param>
+        /// <returns>Weather forecast data for the next 24 hours</returns>
         [AgentTool(Description = "Gets the weather forecast for a day given a location")]
         public async Task<object> GetWeatherForecast([Description("location")] string location)
         {
@@ -61,6 +81,11 @@ namespace InnovAIDemo
             });
         }
 
+        /// <summary>
+        /// Searches Wikipedia for information about a specific topic.
+        /// </summary>
+        /// <param name="searchTerm">The term to search for on Wikipedia</param>
+        /// <returns>Wikipedia search results and content</returns>
         [AgentTool(Description = "searches on wikipedia for information regarding a specific topic")]
         public async Task<object> SearchWikipedia([Description("single term to search for")] string searchTerm)
         {
@@ -69,6 +94,10 @@ namespace InnovAIDemo
             return await wikipediaSearch.SearchAsync(searchTerm);
         }
 
+        /// <summary>
+        /// Turns on the LED light.
+        /// </summary>
+        /// <returns>Status indicating the light was turned on</returns>
         [AgentTool(Description = "Turns the light on")]
         public object TurnOn()
         {
@@ -77,6 +106,10 @@ namespace InnovAIDemo
             return new { Status = "Light turned on" };
         }
 
+        /// <summary>
+        /// Turns off the LED light.
+        /// </summary>
+        /// <returns>Status indicating the light was turned off</returns>
         [AgentTool(Description = "Turns the light off")]
         public object TurnOff()
         {
@@ -85,6 +118,10 @@ namespace InnovAIDemo
             return new { Status = "Light turned off" };
         }
 
+        /// <summary>
+        /// Checks the current state of the LED light.
+        /// </summary>
+        /// <returns>Status indicating whether the light is on or off</returns>
         [AgentTool(Description = "Checks if the light is on or off")]
         public object IsLightOn()
         {

@@ -9,8 +9,18 @@ using Telegram.Bot;
 
 namespace InnovAIDemo
 {
+    /// <summary>
+    /// Main program class for the InnovAI Demo application.
+    /// This is a Blazor Server application that integrates with Ollama AI and Telegram Bot services.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The main entry point for the application.
+        /// Configures services, sets up dependency injection, and starts the web application.
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
+        /// <returns>A task representing the asynchronous operation</returns>
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +43,12 @@ namespace InnovAIDemo
                 Model = "qwen2.5:3b",
                 Uri = new Uri("http://localhost:11434")
             }));
-            builder.Services.AddSingleton<LedService>();
+
+            if (LedService.IsSupported())
+                builder.Services.AddSingleton<ILedService, LedService>();
+            else
+                builder.Services.AddSingleton<ILedService, FakeLedService>();
+
             builder.Services.AddSingleton<NominatimService>();
             builder.Services.AddSingleton<WeatherService>();
             builder.Services.AddSingleton<OllamaQuickSummarizer>();
